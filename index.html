@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Redirigiendo...</title>
+        <!-- Meta refresh as primary redirect (0 seconds) -->
+        <meta http-equiv="refresh" content="0; url=View/index.html">
+        <script>
+            // JS fallback: replace the location so the redirect doesn't create a
+            // history entry (better UX when pressing back).
+            (function() {
+                try {
+                    window.location.replace('View/index.html');
+                } catch (e) {
+                    // If replace fails for some reason, use assignment as last resort
+                    window.location.href = 'View/index.html';
+                }
+            })();
+        </script>
+        <style>
+            /* Minimal style for the fallback page */
+            html,body{height:100%;margin:0}
+            body{display:flex;align-items:center;justify-content:center;font-family:system-ui,Segoe UI,Arial,sans-serif;color:#222}
+            a{color:#06c}
+        </style>
+    </head>
+    <body>
+        <div>
+            <p>Si no eres redirigido automáticamente, haz clic en este enlace:</p>
+            <p><a href="View/index.html">Ir a View/index.html</a></p>
+        </div>
+    </body>
+</html>
