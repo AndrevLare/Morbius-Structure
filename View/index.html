@@ -3,28 +3,91 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="CSS/style.css" />
+    <link rel="stylesheet" href="CSS/BG/noise.css" />
+    <link rel="stylesheet" href="CSS/BG/BG-lines.css" />
     <title>Morbius Strip</title>
   </head>
   <body>
     <h1>Morbius' Strip Structure</h1>
-    <model-viewer
-      src="models/Moebius.glb"
-      alt="A detailed 3D object"
-      shadow-intensity="10"
-      auto-rotate
-      autoplay
-      loop
-      exposure="1"
-      seamless-rotation
-      seamless-rotation-speed="50deg/s"
-      class="model"
-    >
-    </model-viewer>
+    <main class="main">
+      <model-viewer
+        src="models/Moebius.glb"
+        alt="A detailed 3D object"
+        shadow-intensity="10"
+        auto-rotate
+        autoplay
+        loop
+        exposure="1"
+        seamless-rotation
+        seamless-rotation-speed="50deg/s"
+        class="main--model"
+      >
+      </model-viewer>
+      <div class="main__img-container">
+        <img src="IMG/Grid1.svg" alt="Grid" class="main__img-container--grid">
+      </div>
+    </main>
 
+    <section class="section">
+      <div class="section__img-container">
+        <img src="IMG/Grid2.svg" alt="Grid" class="section__img-container--grid">
+      </div>
+      <ol class="section__list">
+        <li class="section__list--li">Heaven</li>
+        <li class="section__list--li">Hell</li>
+        <li class="section__list--li">Universe</li>
+        <li class="section__list--li">Gates</li>
+      </ol>
+    </section>
+
+    <!-- Others -->
+    <div class="bg"></div>
+    <div class="lines">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+    <span class="border"></span>
+    <span class="cursor-shadow"></span>
     <script
       type="module"
       src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
     ></script>
+    <script>
+      // Cursor shadow: track last known mouse coordinates and use fixed
+      // positioning so the element stays aligned with the viewport while
+      // scrolling. The previous scroll handler referenced `e.clientX` which
+      // doesn't exist for scroll events and caused misalignment.
+      const cursorShadow = document.querySelector(".cursor-shadow");
+
+      // store last known mouse coords (client coordinates relative to viewport)
+      let mouseX = 0;
+      let mouseY = 0;
+
+      // ensure the shadow uses fixed positioning (viewport coordinates)
+      // and doesn't capture pointer events
+      cursorShadow.style.position = 'fixed';
+      cursorShadow.style.pointerEvents = 'none';
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorShadow.style.left = `${mouseX}px`;
+        cursorShadow.style.top = `${mouseY}px`;
+      });
+
+      window.addEventListener('scroll', () => {
+        // Re-apply the last-known client coordinates so the shadow remains
+        // visually attached to the cursor while the page scrolls.
+        cursorShadow.style.left = `${mouseX}px`;
+        cursorShadow.style.top = `${mouseY}px`;
+      });
+    </script>
   </body>
 </html>
