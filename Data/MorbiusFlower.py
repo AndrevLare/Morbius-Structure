@@ -1,4 +1,4 @@
-from Data.MoebiusStrip import (Strip, Universe, Gate)
+from MoebiusStrip import (Strip, Universe, Gate)
 
 class MorbiusFlower:
     def __init__(self, strip):
@@ -27,12 +27,17 @@ class MorbiusFlower:
                 return
 
     def add(self, index, strip):
+        if index == 0:
+            self.append(strip)
+            self.first = strip.gate
+            return
         n = 0
         for i in self:
             if n == (index-1):
                 strip.gate.next_gate = i.next_gate
                 i.next_gate = strip
             n += 1
+        self.append(strip)
 
     def index(self, strip):
         n = 0
@@ -40,6 +45,7 @@ class MorbiusFlower:
             if i == strip.gate:
                 return n
             n += 1
+        raise KeyError ("Strip not found in MorbiusFlower")
 
     def find(self, index):
         i = 0
@@ -47,12 +53,16 @@ class MorbiusFlower:
             if i == index:
                 return s
             i += 1
+        raise IndexError (f"Not enough strips to reach index {index}")
 
     def delete(self, index):
         strip = self.find(index-1)
         strip.next_gate = strip.next_gate.next_gate
 
     def __str__(self):
-        for strip in self:
-            print("First strip:")
-            print(strip)
+        n = 0
+        for gate in self:
+            print(f"Strip {n}:")
+            print(gate.strip)
+            n += 1
+        return ""
