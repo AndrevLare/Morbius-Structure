@@ -35,7 +35,8 @@ class MorbiusFlower:
         for i in self:
             if n == (index-1):
                 strip.gate.next_gate = i.next_gate
-                i.next_gate = strip
+                i.next_gate = strip.gate
+                return
             n += 1
         self.append(strip)
 

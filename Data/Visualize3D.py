@@ -111,34 +111,74 @@ def visualize_flower_3d(flower, filename='morbius_structure_3d.html'):
         # Coordenadas para la malla de la cinta
         x_strip, y_strip, z_strip = [], [], []
         
-        # Guardar posición del Gate para conectar después
-        gate_pos = None
-        
         # Vector normal al plano del strip para la torsión local
         n_plane = np.cross(v1, v2)
 
-        for j, node in enumerate(strip_nodes):
-            # Ángulo dentro del strip
-            phi = 2 * np.pi * j / num_universes
+        # --- GENERACIÓN DE GEOMETRÍA (Cinta Suave) ---
+        # Usamos un número fijo de segmentos para que la cinta se vea bien 
+        # incluso si hay pocos universos (o solo 1).
+        N_SEGMENTS = 60
+        
+        for k in range(N_SEGMENTS):
+            phi = 2 * np.pi * k / N_SEGMENTS
             
-            # Vector radial local del anillo del strip (desde su centro hacia afuera)
+            # Vector radial local
             local_radial = np.cos(phi) * v1 + np.sin(phi) * v2
             
-            # Torsión de Moebius local: rotamos el vector de ancho phi/2
+            # Torsión de Moebius local
             local_twist = phi / 2.0
             width_vec = local_radial * np.cos(local_twist) + n_plane * np.sin(local_twist)
             
             # Centro de la cinta en este punto
             p_center = center + r * local_radial
             
-            # Posiciones de los bordes de la cinta (Heaven y Hell)
+            # Bordes
             pos_h = p_center + width * width_vec
             pos_l = p_center - width * width_vec
             
-            # Guardar vértices para la malla
             x_strip.extend([pos_h[0], pos_l[0]])
             y_strip.extend([pos_h[1], pos_l[1]])
             z_strip.extend([pos_h[2], pos_l[2]])
+
+        # Triangulación de la malla
+        I, J, K = [], [], []
+        n_verts = 2 * N_SEGMENTS
+        for k in range(N_SEGMENTS):
+            h0 = 2 * k
+            l0 = 2 * k + 1
+            h1 = (2 * k + 2) % n_verts
+            l1 = (2 * k + 3) % n_verts
+            
+            I.append(h0); J.append(l0); K.append(h1)
+            I.append(l0); J.append(l1); K.append(h1)
+
+        # Color de la cinta
+        colors = ['green', 'red', 'purple', 'orange', 'cyan', 'magenta']
+        color = colors[i % len(colors)]
+        
+        traces.append(go.Mesh3d(
+            x=x_strip, y=y_strip, z=z_strip,
+            i=I, j=J, k=K,
+            color=color,
+            opacity=0.5,
+            name=f'Strip {i}'
+        ))
+
+        # --- COLOCACIÓN DE NODOS Y ETIQUETAS ---
+        gate_pos = None
+        
+        for j, node in enumerate(strip_nodes):
+            # Ángulo dentro del strip
+            phi = 2 * np.pi * j / num_universes
+            
+            # Recalculamos posición para el nodo específico
+            local_radial = np.cos(phi) * v1 + np.sin(phi) * v2
+            local_twist = phi / 2.0
+            width_vec = local_radial * np.cos(local_twist) + n_plane * np.sin(local_twist)
+            p_center = center + r * local_radial
+            
+            pos_h = p_center + width * width_vec
+            pos_l = p_center - width * width_vec
             
             # Guardar info para textos
             text_h_x.append(pos_h[0])
@@ -152,39 +192,8 @@ def visualize_flower_3d(flower, filename='morbius_structure_3d.html'):
             text_l_val.append(f"L: {node.hell}")
             
             if node == gate:
-                # El gate está en el "centro" de la cinta en ese punto, o en uno de los bordes?
-                # Lo pondremos en el medio para la linea de conexión
-                gate_pos = center + r * local_radial
+                gate_pos = p_center
                 gate_coords.append(gate_pos)
-
-        # Crear triángulos para la malla (Strip Ribbon)
-        # Tenemos 2*num_universes vértices. 
-        # Orden: H0, L0, H1, L1, ...
-        I, J, K = [], [], []
-        n = 2 * num_universes
-        for k in range(num_universes):
-            # Índices de los 4 vértices del segmento (quad)
-            h0 = 2 * k
-            l0 = 2 * k + 1
-            h1 = (2 * k + 2) % n
-            l1 = (2 * k + 3) % n
-            
-            # Triángulo 1: H0 -> L0 -> H1
-            I.append(h0); J.append(l0); K.append(h1)
-            # Triángulo 2: L0 -> L1 -> H1
-            I.append(l0); J.append(l1); K.append(h1)
-
-        # Color de la cinta basado en el índice del strip
-        colors = ['green', 'red', 'purple', 'orange', 'cyan', 'magenta']
-        color = colors[i % len(colors)]
-        
-        traces.append(go.Mesh3d(
-            x=x_strip, y=y_strip, z=z_strip,
-            i=I, j=J, k=K,
-            color=color,
-            opacity=0.5,
-            name=f'Strip {i}'
-        ))
 
     # Trazas de Texto (Heaven y Hell)
     traces.append(go.Scatter3d(
@@ -266,12 +275,26 @@ if __name__ == "__main__":
     for i in range(30, 36):
         strip4.append(i, i+5)
 
+    #Strip 5
+    strip5 = Strip()
+    strip5.append("A", "Z")
+    strip5.append("B", "Y")
+
+    strip6 = Strip()
+
     # Creación Flor
     flower = MorbiusFlower(strip2)
     flower.append(strip3)
     flower.append(strip4)
+    flower.append(strip5)
     flower.add(0, strip1)
+    flower.add(2, strip6)
     
+
+    strip6.append("X1", "W1")
+    strip6.append("X2", "W2")
+    strip6.append("X3", "W3")
+    strip6.add(0, "X0", "W0")
     # Operación final en Pruebas.py
     # flower.delete(3) # Comentado para visualizar los 4 strips
 
