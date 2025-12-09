@@ -1,0 +1,128 @@
+// Morbius Structure
+digraph {
+	rankdir=LR
+	subgraph cluster_0 {
+		label="Strip 0"
+		style=dashed
+		1605385976080 [label="Gate
+(Strip 0)" fillcolor=lightblue shape=doublecircle style=filled]
+		1605385976208 [label="Universe
+H:1
+L:6" shape=box]
+		1605385976080 -> 1605385976208
+		1605385976272 [label="Universe
+H:2
+L:7" shape=box]
+		1605385976208 -> 1605385976272
+		1605391051664 [label="Universe
+H:3
+L:8" shape=box]
+		1605385976272 -> 1605391051664
+		1605391052432 [label="Universe
+H:Hola
+L:Mundo" shape=box]
+		1605391051664 -> 1605391052432
+		1605391051728 [label="Universe
+H:4
+L:9" shape=box]
+		1605391052432 -> 1605391051728
+		1605391051984 [label="Universe
+H:5
+L:10" shape=box]
+		1605391051728 -> 1605391051984
+		1605391051984 -> 1605385976080 [constraint=false]
+	}
+	subgraph cluster_1 {
+		label="Strip 1"
+		style=dashed
+		1605391054800 [label="Gate
+(Strip 1)" fillcolor=lightblue shape=doublecircle style=filled]
+		1605391054608 [label="Universe
+H:10
+L:15" shape=box]
+		1605391054800 -> 1605391054608
+		1605391054736 [label="Universe
+H:11
+L:16" shape=box]
+		1605391054608 -> 1605391054736
+		1605391054544 [label="Universe
+H:12
+L:17" shape=box]
+		1605391054736 -> 1605391054544
+		1605391054288 [label="Universe
+H:14
+L:19" shape=box]
+		1605391054544 -> 1605391054288
+		1605391054928 [label="Universe
+H:15
+L:20" shape=box]
+		1605391054288 -> 1605391054928
+		1605391054928 -> 1605391054800 [constraint=false]
+	}
+	subgraph cluster_2 {
+		label="Strip 2"
+		style=dashed
+		1605391054864 [label="Gate
+(Strip 2)" fillcolor=lightblue shape=doublecircle style=filled]
+		1605391055056 [label="Universe
+H:20
+L:25" shape=box]
+		1605391054864 -> 1605391055056
+		1605391054992 [label="Universe
+H:21
+L:26" shape=box]
+		1605391055056 -> 1605391054992
+		1605391055120 [label="Universe
+H:22
+L:27" shape=box]
+		1605391054992 -> 1605391055120
+		1605391055184 [label="Universe
+H:23
+L:28" shape=box]
+		1605391055120 -> 1605391055184
+		1605391055248 [label="Universe
+H:24
+L:29" shape=box]
+		1605391055184 -> 1605391055248
+		1605391055376 [label="Universe
+H:25
+L:30" shape=box]
+		1605391055248 -> 1605391055376
+		1605391055376 -> 1605391054864 [constraint=false]
+	}
+	subgraph cluster_3 {
+		label="Strip 3"
+		style=dashed
+		1605391055440 [label="Gate
+(Strip 3)" fillcolor=lightblue shape=doublecircle style=filled]
+		1605391055568 [label="Universe
+H:30
+L:35" shape=box]
+		1605391055440 -> 1605391055568
+		1605391055504 [label="Universe
+H:31
+L:36" shape=box]
+		1605391055568 -> 1605391055504
+		1605391055632 [label="Universe
+H:32
+L:37" shape=box]
+		1605391055504 -> 1605391055632
+		1605391055696 [label="Universe
+H:33
+L:38" shape=box]
+		1605391055632 -> 1605391055696
+		1605391055760 [label="Universe
+H:34
+L:39" shape=box]
+		1605391055696 -> 1605391055760
+		1605391055888 [label="Universe
+H:35
+L:40" shape=box]
+		1605391055760 -> 1605391055888
+		1605391055888 -> 1605391055440 [constraint=false]
+	}
+	1605385976080 -> 1605391054800 [label=next_gate color=red constraint=false penwidth=2.0]
+	1605391054800 -> 1605391054864 [label=next_gate color=red constraint=false penwidth=2.0]
+	1605391054864 -> 1605391055440 [label=next_gate color=red constraint=false penwidth=2.0]
+	1605391055440 -> 1605385976080 [label=next_gate color=red constraint=false penwidth=2.0]
+}
